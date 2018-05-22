@@ -28,16 +28,16 @@ $(function() {
 
     //Expects that menu will be hidden by default
     it('is hidden', function() {
-      expect(element.className).toContain('menu-hidden');
+      expect(element.classList).toContain('menu-hidden');
     });
 
     //Expects what on first click the menu appears and on second click disappears
     it('click on menu', function() {
       menu.click();
-      expect(element.className).not.toContain('menu-hidden');
+      expect(element.classList).not.toContain('menu-hidden');
 
       menu.click();
-      expect(element.className).toContain('menu-hidden');
+      expect(element.classList).toContain('menu-hidden');
     });
   });
 
