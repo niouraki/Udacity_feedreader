@@ -9,7 +9,7 @@ $(function() {
     it('have URL', function() {
       for (let i = 0; i < allFeeds.length; i++) {
         expect(allFeeds[i].url).toBeDefined();
-        expect(allFeeds[i].url).not.toBe(" ");
+        expect(allFeeds[i].url.length).not.toBe(0);
       }
     });
 
@@ -17,7 +17,7 @@ $(function() {
     it('have name', function() {
       for (let i = 0; i < allFeeds.length; i++) {
         expect(allFeeds[i].name).toBeDefined();
-        expect(allFeeds[i].name).not.toBe(" ");
+        expect(allFeeds[i].name.length).not.toBe(0);
       }
     });
   });
@@ -43,37 +43,43 @@ $(function() {
 
   describe('Initial Entries', function() {
 
-    let container = document.getElementsByClassName('feed');
-
     //This will run before the function loadFeed is called each time
     beforeEach(function(done) {
-      setTimeout(function loadFeed() {
+      loadFeed(0, function() {
         done();
-      }, 100);
+      });
     });
 
     //Makes sure that the length of the feed element will be greater than zero
     it('should contain element', function(done) {
-      expect(container.length).toBeGreaterThan(0);
+      //It gets the children of feed element
+      let container = document.querySelector('.feed').querySelectorAll('.entry').length;
+      expect(container).toBeGreaterThan(0);
       done();
     });
   });
 
   describe('New Feed Selection', function() {
-    let container;
+    let prevFeedData;
+    let newFeedData;
 
     //This will run before the function loadFeed is called each time
     beforeEach(function(done) {
-      setTimeout(function loadFeed() {
-        let container = document.querySelector('.feed').innerHTML;
-        done();
-      }, 100);
+      //It runs the loadFeed Function
+      loadFeed(0, function() {
+        prevFeedData = document.querySelector('.feed').innerHTML;
+        //It runs the load feed function again after a feed has been added
+        loadFeed(1, function() {
+          newFeedData = document.querySelector('.feed').innerHTML;
+          done();
+        });
+      });
     });
 
-    //Makes sure that when a new feed is added it is included
+    //Makes sure that when a new feed is added it is included by comparing
+    //the feed element before and after
     it('should change the content', function(done) {
-      let changedContainer = document.querySelector('.feed').innerHTML;
-      expect(changedContainer).not.toBe(container)
+      expect(prevFeedData).not.toBe(newFeedData);
       done();
     });
   });
